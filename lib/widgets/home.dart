@@ -72,20 +72,25 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     
-    double cardHeigth = MediaQuery.of(context).size.height;
-   // print(dateactuelle.year);
-   // print();
-    List<DataUserCalories> objectdata = [
-      new DataUserCalories(
-        genre,
-        age,
-        maTailleSlider,
-        poidsubmitted,
-        itemSelectionne,
-      ),
-    ];
+   double cardHeigth = MediaQuery.of(context).size.height;
+
+  List<DataUserCalories> objectdata = [
+    new DataUserCalories(
+      genre,
+      age,
+      maTailleSlider,
+      poidsubmitted,
+      itemSelectionne,
+    ),
+  ];
 
 double resultDialog = objectdata[0].calculCalorie();
+
+if (Platform.isIOS) {
+  print("Nous sommes sous IOS");
+} else {
+  print("Nous ne sommes pas sur iOS");
+}
 
    return new GestureDetector(
         onTap: (){

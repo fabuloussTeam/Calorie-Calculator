@@ -19,7 +19,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
 
-
   bool genre = false;
   double maTailleSlider = 0.0;
   double votrePoid;
@@ -29,7 +28,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Map activiteSportiveList = {};
   int age;
   DateTime date;
-  DateTime dateactuelle = new DateTime.now();
+  DateTime dateactuelle = new DateTime.now(
+  );
   String itemSelectionne;
   int itemkeyselectionne;
   double actualYear;
@@ -44,8 +44,9 @@ class _MyHomePageState extends State<MyHomePage> {
   BuildContext buildContext;
 
   @override
-  void initState(){
-    super.initState();
+  void initState() {
+    super.initState(
+    );
     genre = false;
     date = null;
     age = null;
@@ -60,79 +61,95 @@ class _MyHomePageState extends State<MyHomePage> {
     };
 
     dataUserCalories = new DataUserCalories(
-        (genre == true) ? true : false,
-        (age == null) ? 0 : age,
-        (maTailleSlider != 0.0) ? maTailleSlider: 0.0,
-        (poidsubmitted == null) ? 0.0 : poidsubmitted,
-        (itemSelectionne == null) ? "" : itemSelectionne,
+      (genre == true) ? true : false,
+      (age == null) ? 0 : age,
+      (maTailleSlider != 0.0) ? maTailleSlider : 0.0,
+      (poidsubmitted == null) ? 0.0 : poidsubmitted,
+      (itemSelectionne == null) ? "" : itemSelectionne,
     );
-
   }
 
   @override
   Widget build(BuildContext context) {
-    
+    List<DataUserCalories> objectdata = [
+      new DataUserCalories(
+        genre,
+        age,
+        maTailleSlider,
+        poidsubmitted,
+        itemSelectionne,
+      ),
+    ];
 
-  List<DataUserCalories> objectdata = [
-    new DataUserCalories(
-      genre,
-      age,
-      maTailleSlider,
-      poidsubmitted,
-      itemSelectionne,
-    ),
-  ];
+    double resultDialog = objectdata[0].calculCalorie(
+    );
 
-double resultDialog = objectdata[0].calculCalorie();
+    if (Platform.isIOS) {
+      print(
+          "Nous sommes sous IOS");
+    } else {
+      print(
+          "Nous ne sommes pas sur iOS");
+    }
 
-if (Platform.isIOS) {
-  print("Nous sommes sous IOS");
-} else {
-  print("Nous ne sommes pas sur iOS");
-}
-
-   return new GestureDetector(
-        onTap: (){
-          FocusScope.of(context).requestFocus(new FocusNode());
+    return new GestureDetector(
+        onTap: () {
+          FocusScope.of(
+              context).requestFocus(
+              new FocusNode(
+              ));
         },
         child: (Platform.isIOS)
-            ?  new CupertinoPageScaffold(
+            ? new CupertinoPageScaffold(
             navigationBar: new CupertinoNavigationBar(
-              backgroundColor: setColors(),
-              middle: new CustomText(widget.title),
+              backgroundColor: setColors(
+              ),
+              middle: new CustomText(
+                  widget.title),
             ),
-            child: body()
+            child: body(
+            )
         )
 
             : Scaffold(
             appBar: AppBar(
-              backgroundColor: (genre == false) ? Colors.pinkAccent : Colors.blue,
-              title: Text(widget.title),
+              backgroundColor: (genre == false) ? Colors.pinkAccent : Colors
+                  .blue,
+              title: Text(
+                  widget.title),
             ),
-          body: body()
-          )
-        );
+            body: body(
+            )
+        )
+    );
   }
 
+  // Le contenu du body utilise pour le capertino(ios) et mode normal android
   Widget body() {
     return new SingleChildScrollView(
       // in the middle of the parent.
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          padding(),
+          padding(
+          ),
           new CustomText(
             "Remplissez tous les champs pour obtenir votre besoin journalier en calories",
             color: Colors.grey[900],
             factor: 1.1,
           ),
-          padding(),
+          padding(
+          ),
           new Card(
             //  margin: EdgeInsets.only(top: 10),
             elevation: 20,
             color: Colors.white,
             child: new Container(
-              width: MediaQuery.of(context).size.height / 1.8,
+              width: MediaQuery
+                  .of(
+                  context)
+                  .size
+                  .height / 1.8,
               //  height: cardHeigth / 1.6,
 
               child: new Column(
@@ -141,85 +158,88 @@ if (Platform.isIOS) {
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      new CustomText("Femme", color: Colors.pinkAccent,),
-                      new Switch(
-                          value: genre,
-                          inactiveTrackColor: Colors.pinkAccent,
-                          onChanged: (bool g){
-                            setState(() {
-                              genre = g;
-                            });
-                          }
-                      ),
-                      new CustomText("Homme", color: Colors.blue,)
+                      new CustomText(
+                        "Femme", color: Colors.pinkAccent,),
+                      switchSelonPlatform(),
+                      new CustomText(
+                        "Homme", color: Colors.blue,)
                     ],
                   ),
-                  padding(),
+                  padding(
+                  ),
                   new RaisedButton(
                     onPressed: currentAgeSelect,
                     color: (genre == false) ? Colors.pinkAccent : Colors.blue,
                     child: new CustomText(
-                      (age == null) ? "Appuyer pour entrer votre age" : "Vous avez $age ans",
+                      (age == null)
+                          ? "Appuyer pour entrer votre age"
+                          : "Vous avez $age ans",
                       color: Colors.white,
                     ),
                   ),
-                  padding(),
+                  padding(
+                  ),
                   new CustomText(
-                      "Votre taille est de ${maTailleSlider.toInt()} Mètre",
-                      color:  (genre == false) ?  Colors.pinkAccent : Colors.blue
+                      "Votre taille est de ${maTailleSlider.toInt(
+                      )} Mètre",
+                      color: (genre == false) ? Colors.pinkAccent : Colors.blue
                   ),
-                  padding(),
-                  new Slider(
-                      value: maTailleSlider,
-                      min: 0.0,
-                      max: 215.0,
-                      activeColor: (genre == false) ? Colors.pinkAccent : Colors.blue,
-                      onChanged: (double matailleActuelle){
-                        setState(() {
-                          maTailleSlider = matailleActuelle;
-                        });
-                      }
+                  padding(
                   ),
+                  sliderSelonPlatform(),
                   padding(),
                   new Container(
-                    padding: EdgeInsets.only(left: 10, right: 10),
+                    padding: EdgeInsets.only(
+                        left: 10, right: 10),
                     child: new TextField(
                       keyboardType: TextInputType.number,
-                      onChanged: (String b){
-                        setState(() {
-                          poidchanged = double.tryParse(b);
-                          print("sorti de poid: $poidchanged");
-
-                        });
+                      onChanged: (String b) {
+                        setState(
+                                () {
+                              poidchanged = double.tryParse(
+                                  b);
+                              print(
+                                  "sorti de poid: $poidchanged");
+                            });
                       },
-                      onSubmitted: (String b){
-                        setState(() {
-                          poidsubmitted = double.tryParse(b);
-                          //   print("sorti de poid: $poidsubmitted");
-                        });
-
+                      onSubmitted: (String b) {
+                        setState(
+                                () {
+                              poidsubmitted = double.tryParse(
+                                  b);
+                              //   print("sorti de poid: $poidsubmitted");
+                            });
                       },
                       decoration: new InputDecoration(
                           labelText: "Entrez votre poids"
                       ),
                     ),
                   ),
-                  padding(),
-                  new CustomText("Quelle est votre activité Sportive?", color: (genre == false) ? Colors.pinkAccent : Colors.blue),
-                  padding(),
+                  padding(
+                  ),
+                  new CustomText(
+                      "Quelle est votre activité Sportive?",
+                      color: (genre == false) ? Colors.pinkAccent : Colors
+                          .blue),
+                  padding(
+                  ),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: activiteSportives(),
+                    children: activiteSportives(
+                    ),
                   ),
-                  padding(),
+                  padding(
+                  ),
                 ],
               ),
             ),
           ),
-          padding(),
+          padding(
+          ),
           new RaisedButton(
             onPressed: CalculerNombreCalories,
-            child: new CustomText("Calculer"),
+            child: new CustomText(
+                "Calculer"),
             color: (genre == false) ? Colors.pinkAccent : Colors.blue,
           ),
         ],
@@ -228,8 +248,8 @@ if (Platform.isIOS) {
   }
 
   // Fonction de changement de couleur
-  setColors(){
-    if(genre){
+  setColors() {
+    if (genre) {
       return Colors.blue;
     } else {
       return Colors.pinkAccent;
@@ -237,9 +257,86 @@ if (Platform.isIOS) {
   }
 
   // Fonction pour la faire un espace : Functionne que dans les childs
-  padding(){
-    return new Padding(padding: EdgeInsets.only(top: 20.0));
+  padding() {
+    return new Padding(
+        padding: EdgeInsets.only(
+            top: 20.0));
   }
+
+  //Text avec style function pour IOS et android
+  Text textAvecStyle(String data, {color: Colors.black, fontSize: 15.0}) {
+    if (Platform.isIOS) {
+      return new CustomText(
+        data, textAlign: TextAlign.center,);
+    } else {
+      return new Text(
+        data,
+        textAlign: TextAlign.center,
+        style: new TextStyle(
+            color: color,
+            fontSize: fontSize,
+        ),
+      );
+    };
+  }
+
+  //contruction du swtich pour Android et IOS
+
+  Widget switchSelonPlatform(){
+    if(Platform.isIOS){
+      new CupertinoSwitch(
+          value: genre,
+          activeColor: Colors.blue,
+          onChanged: (bool b){
+            setState(() {
+              genre = b;
+            });
+          }
+      );
+    } else {
+     return new Switch(
+          value: genre,
+          inactiveTrackColor: Colors.pinkAccent,
+          onChanged: (bool g) {
+            setState(
+                    () {
+                  genre = g;
+                });
+          }
+      );
+    }
+  }
+
+  Widget sliderSelonPlatform(){
+   if(Platform.isIOS){
+     return new CupertinoSlider(
+         value: maTailleSlider,
+         min: 0.0,
+         max: 215.0,
+         activeColor: Colors.blue,
+         onChanged: (double matailleActuelle) {
+           setState(() {
+             maTailleSlider = matailleActuelle;
+           });
+         }
+     );
+   } else {
+     return new Slider(
+         value: maTailleSlider,
+         min: 0.0,
+         max: 215.0,
+         activeColor: (genre == false) ? Colors.pinkAccent : Colors
+             .blue,
+         onChanged: (double matailleActuelle) {
+           setState(() {
+                 maTailleSlider = matailleActuelle;
+               });
+         }
+     );
+   }
+  }
+
+
 
 
   // Widget d'affichage des activitées sportive
@@ -370,7 +467,6 @@ void CalculerNombreCalories(){
         }
     );
   }
-
 
 // Alerte pour les champ quine sont pas remplit
   Future<Null> alerte() async {

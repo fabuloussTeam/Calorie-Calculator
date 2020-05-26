@@ -165,20 +165,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         "Homme", color: Colors.blue,)
                     ],
                   ),
-                  padding(
-                  ),
-                  new RaisedButton(
-                    onPressed: currentAgeSelect,
-                    color: (genre == false) ? Colors.pinkAccent : Colors.blue,
-                    child: new CustomText(
-                      (age == null)
-                          ? "Appuyer pour entrer votre age"
-                          : "Vous avez $age ans",
-                      color: Colors.white,
-                    ),
-                  ),
-                  padding(
-                  ),
+                  padding(),
+                  buttonAgeSelonPlateform(),
+                  padding(),
                   new CustomText(
                       "Votre taille est de ${maTailleSlider.toInt(
                       )} Mètre",
@@ -236,12 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           padding(
           ),
-          new RaisedButton(
-            onPressed: CalculerNombreCalories,
-            child: new CustomText(
-                "Calculer"),
-            color: (genre == false) ? Colors.pinkAccent : Colors.blue,
-          ),
+         buttonCalculerSelonPlateform()
         ],
       ),
     );
@@ -280,8 +264,51 @@ class _MyHomePageState extends State<MyHomePage> {
     };
   }
 
-  //contruction du swtich pour Android et IOS
+  //Construction du bouton  calculer pour Android et IOS
+  Widget buttonCalculerSelonPlateform(){
+    if(Platform.isIOS){
+      return CupertinoButton(
+        onPressed: CalculerNombreCalories ,
+        color: setColors(),
+        child: new CustomText("Calculer"),
+      );
+    } else {
+      return  new RaisedButton(
+        onPressed: CalculerNombreCalories,
+        child: new CustomText(
+            "Calculer"),
+        color: (genre == false) ? Colors.pinkAccent : Colors.blue,
+      );
+    }
+  }
 
+  //Construction du bouton  Age pour Android et IOS
+  Widget buttonAgeSelonPlateform(){
+    if(Platform.isIOS){
+      return new CupertinoButton(
+          color: setColors(),
+          child: new CustomText(
+              (age == null)
+                  ? "Sélectionner votre age"
+                  : "Vous avez $age ans",
+          ),
+          onPressed: currentAgeSelect
+      );
+    } else {
+      return new RaisedButton(
+        onPressed: currentAgeSelect,
+        color: (genre == false) ? Colors.pinkAccent : Colors.blue,
+        child: new CustomText(
+          (age == null)
+              ? "Appuyer pour entrer votre age"
+              : "Vous avez $age ans",
+          color: Colors.white,
+        ),
+      );
+    }
+  }
+
+  //contruction du swtich pour Android et IOS
   Widget switchSelonPlatform(){
     if(Platform.isIOS){
       new CupertinoSwitch(
@@ -307,6 +334,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  // Slider selon plateform Android ou IOS
   Widget sliderSelonPlatform(){
    if(Platform.isIOS){
      return new CupertinoSlider(
@@ -335,9 +363,6 @@ class _MyHomePageState extends State<MyHomePage> {
      );
    }
   }
-
-
-
 
   // Widget d'affichage des activitées sportive
 
@@ -468,25 +493,41 @@ void CalculerNombreCalories(){
     );
   }
 
-// Alerte pour les champ quine sont pas remplit
+// Alerte pour les champ qui ne sont pas remplit
   Future<Null> alerte() async {
     return showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return new AlertDialog(
-            title: new Text('Erreur', textScaleFactor: 1.5,),
-            content: new Text("Tous les champs ne sont pas remplis"),
-            contentPadding: EdgeInsets.all(5.0),
-            actions: <Widget>[
-              new FlatButton(
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  child: new Text("Ok", style: new TextStyle(color: Colors.blue) ,)
-              )
-            ],
-          );
+          if(Platform.isIOS) {
+            return new CupertinoAlertDialog(
+              title: textAvecStyle("Erreur"),
+              content: textAvecStyle("Tout les champs ne sont pas remplit"),
+              actions: <Widget>[
+                new CupertinoButton(
+                    color: Colors.white,
+                    child: textAvecStyle("OK", color: Colors.red),
+                    onPressed: (){
+                      Navigator.pop(buildContext);
+                    }
+                )
+              ],
+            );
+          } else {
+            return new AlertDialog(
+              title: new Text('Erreur', textScaleFactor: 1.5,),
+              content: new Text("Tous les champs ne sont pas remplis"),
+              contentPadding: EdgeInsets.all(5.0),
+              actions: <Widget>[
+                new FlatButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: new Text("Ok", style: new TextStyle(color: Colors.blue) ,)
+                )
+              ],
+            );
+          }
         }
     );
   }
